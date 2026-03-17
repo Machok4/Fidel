@@ -10,7 +10,7 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  final titles=["Amount Available", "Amount Spent","Amount","Amount Saved"];
+  final titles = ["Amount Available", "Amount Spent", "Amount", "Amount Saved"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

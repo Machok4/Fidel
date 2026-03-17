@@ -90,12 +90,21 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
+<<<<<<< HEAD
             VALUE "FileDescription", "fidels_project" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "fidels_project" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "fidels_project.exe" "\0"
             VALUE "ProductName", "fidels_project" "\0"
+=======
+            VALUE "FileDescription", "acs314_project" "\0"
+            VALUE "FileVersion", VERSION_AS_STRING "\0"
+            VALUE "InternalName", "acs314_project" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "acs314_project.exe" "\0"
+            VALUE "ProductName", "acs314_project" "\0"
+>>>>>>> af3147af31253afbfa2452243cbf0381625be13a
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

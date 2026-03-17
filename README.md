@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # fidels_project
+=======
+# acs314_project
+>>>>>>> af3147af31253afbfa2452243cbf0381625be13a
 
 A new Flutter project.
 
