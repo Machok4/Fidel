@@ -1,6 +1,6 @@
 {
-    "name": "mels_faux_app_1",
-    "short_name": "mels_faux_app_1",
+    "name": "fidels_project",
+    "short_name": "fidels_project",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

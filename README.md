@@ -1,4 +1,4 @@
-# mels_faux_app_1
+# fidels_project
 
 A new Flutter project.
 
