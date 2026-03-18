@@ -1,7 +1,15 @@
 import 'package:acs314_project/configs/colors.dart';
+import 'package:acs314_project/controllers/logincontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+
+
+LoginController loginController = Get.put(LoginController());
+TextEditingController usernameController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -41,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 TextField(
+                    controller: usernameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0)
@@ -59,22 +68,38 @@ class _LoginScreenState extends State<LoginScreen> {
                    
                   ],
                 ),
-                TextField(
-                  obscureText: true,
+                Obx(() => TextField(
+                  controller: passwordController,
+                  obscureText: !loginController.isPasswordVisible.value,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     hintText: "Don't use an easy password",
-                    suffixIcon: Icon(Icons.visibility_off),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        loginController.togglePasswordVisibility();
+                      },
+                      child: Icon(loginController.isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                    ),
                     prefixIcon: Icon(Icons.lock),
                   ),
-                ),
+                )),
                 SizedBox(height: 30),
                 MaterialButton(
                   onPressed: () {
+                    bool success = login(usernameController.text, passwordController.text);
+                    if (success) {
+                      Get.offAndToNamed("/homescreen");
+                    } else {
+                      Get.snackbar("Login Failed", "Invalid username or password",
+                      progressIndicatorBackgroundColor: Colors.red,
+                          backgroundColor: Colors.red, colorText: Colors.white);
+                    }
                     // handle login tap
-                    Get.offAndToNamed("/homescreen");
+                    //Get.offAndToNamed("/homescreen");
                   },
                   color: Colors.green,
                   minWidth: double.infinity,
