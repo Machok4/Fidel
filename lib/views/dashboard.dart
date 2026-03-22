@@ -1,87 +1,78 @@
-import 'package:acs314_project/configs/colors.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+final List<String> titles = [
+  "Amount Available",
+  "Amount Spent",
+  "Amount Loaned",
+  "Amount Saved"
+];
 
-  @override
-  State<Dashboard> createState() => _DashboardState();
-}
+final List<IconData> iconData = [
+  Icons.account_balance_wallet,
+  Icons.shopping_cart,
+  Icons.credit_card,
+  Icons.savings
+];
 
-class _DashboardState extends State<Dashboard> {
-  final titles = ["Amount Available", "Amount Spent", "Amount", "Amount Saved"];
+final List<String> values = [
+  "KSH 10,000.00",
+  "KSH 35,000.00",
+  "KSH 2,000.00",
+  "KSH 10,000.00"
+];
+
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-        backgroundColor: secondaryColor,
-        centerTitle: true,
-      ),
-
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Hello Fidel',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-            ),
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Hello Fidel',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
           ),
-
-          Expanded(
-            child: GridView.builder(
-              itemCount: 4,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.account_balance_wallet,
-                          size: 30,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          "Amount spent",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          "KSH 20,000.00",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+        ),
+        Expanded(
+          child: GridView.builder(
+            itemCount: titles.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // two cards per row
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
             ),
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(iconData[index], size: 40, color: Colors.white),
+                    const SizedBox(height: 8),
+                    Text(
+                      titles[index],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      values[index],
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-        ],
-      ),
-
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.blueAccent,
-        items: const <Widget>[
-          Icon(Icons.home, size: 30),
-          Icon(Icons.add, size: 30),
-          Icon(Icons.list, size: 30),
-          Icon(Icons.person, size: 30),
-        ],
-        onTap: (index) {
-          // Handle tap
-        },
-      ),
+        ),
+      ],
     );
   }
 }
