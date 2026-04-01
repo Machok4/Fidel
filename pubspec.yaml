@@ -88,4 +88,8 @@ flutter:
   #         weight: 700
  #
   # For details regarding fonts from package dependencies,
+<<<<<<< HEAD
   # see https://flutter.dev/to/font-from-package
+=======
+  # see https://flutter.dev/to/font-from-package
+>>>>>>> 7d8880763acc8649a9a2344a9c616e021efc34ca

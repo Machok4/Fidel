@@ -21,154 +21,84 @@ class _MyWidgetState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: Text(
-          "SIGN UP",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          title: Text(
+           "SIGN UP",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Sign up",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Text(
-                    "Enter Name",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  hintText: "Enter Name",
-
-                  prefixIcon: Icon(Icons.person),
+        body: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                
+                Text(
+                  "Sign up",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              // SizedBox(height: 20),
-              // Row(
-              //   children: [
-              //     Text(
-              //       "Enter Name",
-              //       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-              //     ),
-              //   ],
-              // ),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     hintText: "Enter Last Name",
-
-              //     prefixIcon: Icon(Icons.person),
-              //   ),
-              // ),
-              // SizedBox(height: 20),
-              // Row(
-              //   children: [
-              //     Text(
-              //       "Enter Number",
-              //       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-              //     ),
-              //   ],
-              // ),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     hintText: "Use valid Phone Number",
-
-              //     prefixIcon: Icon(Icons.phone),
-              //   ),
-              // ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Text(
-                    "Enter email",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  hintText: "Use a valid email",
-
-                  prefixIcon: Icon(Icons.email),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text("Enter email",style: TextStyle(fontSize:15,fontWeight: FontWeight.w700),),
+                  ],
                 ),
-              ),
-              SizedBox(height: 30),
-              Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0)),
-
-              Row(
-                children: [
-                  Text(
-                    "Create password",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  hintText: "Don't use an easy password",
-                  suffixIcon: Icon(Icons.visibility_off),
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Text(
-                    "Confirm password",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  hintText: "Re-enter the password",
-                  suffixIcon: Icon(Icons.visibility_off),
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-              SizedBox(height: 30),
-              MaterialButton(
-                onPressed: () async {
-                  final response = await http.get(
-                    Uri.parse(
-                      "https://localhost/rootfolder/create.php?firstname=${firstname.text}&email=${email.text}&password=${password.text}",
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)
                     ),
-                  );
-                  print(response.body);
-
-                  bool success = signupController.signup(
+                    hintText:"Use a valid email",
+                    
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                
+                Row(
+                  children: [
+                    Text("Create password",style: TextStyle(fontSize:15,fontWeight: FontWeight.w700),),
+                   
+                  ],
+                ),
+                TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    hintText: "Don't use an easy password",
+                    suffixIcon: Icon(Icons.visibility_off),
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    Text("Confirm password",style: TextStyle(fontSize:15,fontWeight: FontWeight.w700),),
+                   
+                  ],
+                ),
+                TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    hintText: "Re-enter the password",
+                    suffixIcon: Icon(Icons.visibility_off),
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                ),
+                SizedBox(height: 30),
+                MaterialButton(
+                  onPressed: () {
+                  bool success = Signupcontroller.signup(
                     emailController.text,
                     passwordController.text,
                   );
