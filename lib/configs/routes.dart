@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:acs314_project/views/profile.dart';
 
 var routes = [
-  GetPage(name: "/profilescreen", page: () => ProfileScreen()),
+  GetPage(name: "/profilescreen", page: () => ProfilePage()),
   GetPage(name: "/", page: () => LoginScreen()),
   GetPage(name: "/signup", page: () => SignUpScreen()),
   GetPage(name: "/homescreen", page: () => Homescreen()),
