@@ -1,5 +1,6 @@
-// screens/add_expense_screen.dart
 import 'package:flutter/material.dart';
+import 'package:acs314_project/views/list.dart';
+import 'package:acs314_project/models/money_model.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -26,39 +27,42 @@ class AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add Expense')),
+      appBar: AppBar(title: const Text('Add Expense')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 onChanged: (value) => title = value,
-                validator: (value) => value!.isEmpty ? 'Enter title' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Enter title' : null,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 keyboardType: TextInputType.number,
                 onChanged: (value) => amount = double.tryParse(value) ?? 0,
-                validator: (value) => value!.isEmpty ? 'Enter amount' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Enter amount' : null,
               ),
-              DropdownButtonFormField(
-                initialValue: category,
-                items: _categories.map((category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category),
-                  );
+              DropdownButtonFormField<String>(
+                value: category,
+                items: _categories.map((cat) {
+                  return DropdownMenuItem(value: cat, child: Text(cat));
                 }).toList(),
-                onChanged: (value) => setState(() => category = value!),
-                decoration: InputDecoration(labelText: 'Category'),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => category = value);
+                  }
+                },
+                decoration: const InputDecoration(labelText: 'Category'),
               ),
               ListTile(
-                title: Text('Date'),
+                title: const Text('Date'),
                 subtitle: Text('${selectedDate.toLocal()}'.split(' ')[0]),
-                trailing: Icon(Icons.calendar_today),
+                trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
                   final picked = await showDatePicker(
                     context: context,
@@ -71,13 +75,25 @@ class AddExpenseScreenState extends State<AddExpenseScreen> {
                   }
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                child: Text('Save Expense'),
+                child: const Text('Save Expense'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Save expense logic here
-                    Navigator.pop(context);
+                    
+                    myMoneyList.add(
+                      Money(
+                        whereSpent: title,
+                        amountSpent: amount,
+                        image: "assets/images/item_0.png",
+                      ),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Expense Saved")),
+                    );
+
+                    setState(() {});
                   }
                 },
               ),
