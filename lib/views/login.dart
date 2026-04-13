@@ -96,17 +96,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 30),
               MaterialButton(
-                onPressed: () {
-                  bool success = loginController.login(
+                onPressed: () async {
+                  final result = await loginController.login(
                     usernameController.text,
                     passwordController.text,
                   );
-                  if (success) {
+                  if (result['success'] == 1) {
                     Get.offAndToNamed("/homescreen");
                   } else {
                     Get.snackbar(
                       "Login Failed",
-                      "Invalid username or password",
+                      result['message'] ?? "Invalid username or password",
                       progressIndicatorBackgroundColor: Colors.red,
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
