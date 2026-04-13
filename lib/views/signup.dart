@@ -49,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
     try {
       final response = await http.get(
         Uri.parse(
-          "http://localhost/acs314_project/create.php?firstname=$firstname&email=$email&password=$password",
+          "http://192.168.11.28/rootfolder/create.php?firstname=$firstname&email=$email&password=$password&confirmPassword=$confirmPassword",
         ),
       );
 
@@ -78,41 +78,34 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         title: const Text("Sign Up"),
         backgroundColor: Colors.white,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/BM logo.jpg', height: 100, width: 100),
-
               const SizedBox(height: 10),
 
               const Text("Create Account", style: TextStyle(fontSize: 20)),
 
               const SizedBox(height: 20),
 
-              /// NAME
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Enter your name",
+                  "Enter Name",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-
               const SizedBox(height: 5),
-
               TextField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
-                  hintText: "Full name",
+                  hintText: "Please input Name",
                   prefixIcon: const Icon(Icons.person),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -122,7 +115,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 15),
 
-              /// EMAIL
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -130,9 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-
               const SizedBox(height: 5),
-
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -147,7 +137,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 15),
 
-              /// PASSWORD
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -155,9 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-
               const SizedBox(height: 5),
-
               TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
@@ -170,9 +157,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           ? Icons.visibility_off
                           : Icons.visibility,
                     ),
-                    onPressed: () {
-                      setState(() => _obscurePassword = !_obscurePassword);
-                    },
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -189,9 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-
               const SizedBox(height: 5),
-
               TextField(
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
@@ -204,12 +188,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           ? Icons.visibility_off
                           : Icons.visibility,
                     ),
-                    onPressed: () {
-                      setState(
-                        () =>
-                            _obscureConfirmPassword = !_obscureConfirmPassword,
-                      );
-                    },
+                    onPressed: () => setState(
+                      () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                    ),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -219,7 +200,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 20),
 
-              /// SIGN UP BUTTON
               GestureDetector(
                 onTap: _isLoading ? null : signUp,
                 child: Container(
@@ -241,18 +221,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 20),
 
-              /// BACK TO LOGIN
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Already have an account?"),
-
                   const SizedBox(width: 5),
-
                   GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                     child: const Text(
                       "Login",
                       style: TextStyle(color: Colors.blue),
