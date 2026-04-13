@@ -1,12 +1,8 @@
 import 'dart:convert';
-
-import 'package:acs314_project/models/money_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
-
-var myMoneyList = <Money>[];
+import '../models/money_model.dart';
+import 'addexpense.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -16,44 +12,95 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  Future<void> fetchMoney() async {
-    var response = await http.get(
-      Uri.parse("https://localhost/rootfolder/php.php"),
-    );
-    if (response.statusCode == 200) {
-      var serverData = jsonDecode(response.body);
-      var moneyList = serverData["data"];
-      for (var money in moneyList) {
-        // Future backend mapping here
+  List<Money> expenses = [];
+  bool isLoading = true;
+
+  Future<void> fetchExpenses() async {
+    try {
+      final response = await http.get(
+        Uri.parse("http://192.168.11.28/rootfolder/get_expenses.php"),
+      );
+
+      if (response.statusCode != 200) {
+        setState(() => isLoading = false);
+        return;
       }
-    } else {
-      Get.snackbar("Error", "Server error");
+
+      final data = jsonDecode(response.body);
+
+      if (data["success"] != 1) {
+        setState(() => isLoading = false);
+        return;
+      }
+
+      setState(() {
+        expenses = (data["data"] as List)
+            .map((item) => Money.fromJson(item))
+            .toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
     }
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {}); 
+  void initState() {
+    super.initState();
+    fetchExpenses();
+  }
+
+  Future<void> goToAddExpense() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
+    );
+
+    if (result == true) {
+      fetchExpenses();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: myMoneyList.isEmpty
-          ? const Center(child: Text("No expenses added yet"))
+      appBar: AppBar(
+        title: const Text("Expenses"),
+        actions: [
+          IconButton(icon: const Icon(Icons.add), onPressed: goToAddExpense),
+        ],
+      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : expenses.isEmpty
+          ? const Center(child: Text("No expenses found"))
           : ListView.builder(
-              itemCount: myMoneyList.length,
+              itemCount: expenses.length,
               itemBuilder: (context, index) {
+                final item = expenses[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
-                    title: Text(myMoneyList[index].whereSpent),
-                    subtitle: Text("KSH ${myMoneyList[index].amountSpent}"),
+                    leading: CircleAvatar(
+                      child: Text(item.category[0].toUpperCase()),
+                    ),
+                    title: Text(item.title),
+                    subtitle: Text("${item.category} | ${item.expenseDate}"),
+                    trailing: Text(
+                      "KSH ${item.amount.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: goToAddExpense,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
