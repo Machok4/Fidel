@@ -1,7 +1,22 @@
 class Money {
-   String whereSpent;
-   String image;
-   double amountSpent;
+  String title;
+  double amount;
+  String category;
+  String expenseDate;
 
-  Money({required this.whereSpent, required this.image, required this.amountSpent});
+  Money({
+    required this.title,
+    required this.amount,
+    required this.category,
+    required this.expenseDate,
+  });
+
+  factory Money.fromJson(Map<String, dynamic> json) {
+    return Money(
+      title: json["title"] ?? "",
+      amount: double.parse(json["amount"].toString()),
+      category: json["category"] ?? "",
+      expenseDate: json["expense_date"] ?? "",
+    );
+  }
 }
