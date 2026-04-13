@@ -1,70 +1,98 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:acs314_project/views/list.dart';
-import 'package:acs314_project/models/money_model.dart';
+import 'package:http/http.dart' as http;
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
 
   @override
-  AddExpenseScreenState createState() => AddExpenseScreenState();
+  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
 }
 
-class AddExpenseScreenState extends State<AddExpenseScreen> {
+class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _formKey = GlobalKey<FormState>();
+
   String title = '';
   double amount = 0;
   String category = 'Food';
   DateTime selectedDate = DateTime.now();
 
-  final List<String> _categories = [
+  final List<String> categories = [
     'Food',
     'Transport',
-    'Entertainment',
     'Shopping',
     'Bills',
+    'Other',
   ];
+
+  Future<void> saveExpense() async {
+    try {
+      var response = await http.get(
+        Uri.parse(
+          "http://192.168.11.28/rootfolder/save_expense.php?title=$title&amount=$amount&category=$category&expense_date=${selectedDate.toIso8601String().split('T')[0]}",
+        ),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == 1) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Expense Saved")));
+        Navigator.pop(context, true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data["message"] ?? "Failed to save")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Expense')),
+      appBar: AppBar(title: const Text("Add Expense")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: "Title"),
                 onChanged: (value) => title = value,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter title' : null,
+                validator: (value) => value!.isEmpty ? "Enter title" : null,
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: "Amount"),
                 keyboardType: TextInputType.number,
                 onChanged: (value) => amount = double.tryParse(value) ?? 0,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter amount' : null,
-              ),
-              DropdownButtonFormField<String>(
-                value: category,
-                items: _categories.map((cat) {
-                  return DropdownMenuItem(value: cat, child: Text(cat));
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => category = value);
-                  }
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Enter an amount';
+                  final parsed = double.tryParse(value);
+                  if (parsed == null || parsed <= 0)
+                    return 'Enter a valid amount';
+                  return null;
                 },
-                decoration: const InputDecoration(labelText: 'Category'),
+              ),
+              DropdownButtonFormField(
+                value: category,
+                items: categories
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
+                onChanged: (value) => setState(() => category = value!),
+                decoration: const InputDecoration(labelText: "Category"),
               ),
               ListTile(
-                title: const Text('Date'),
-                subtitle: Text('${selectedDate.toLocal()}'.split(' ')[0]),
+                title: const Text("Select Date"),
+                subtitle: Text(selectedDate.toString().split(" ")[0]),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
-                  final picked = await showDatePicker(
+                  var picked = await showDatePicker(
                     context: context,
                     initialDate: selectedDate,
                     firstDate: DateTime(2020),
@@ -77,25 +105,12 @@ class AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                child: const Text('Save Expense'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    
-                    myMoneyList.add(
-                      Money(
-                        whereSpent: title,
-                        amountSpent: amount,
-                        image: "assets/images/item_0.png",
-                      ),
-                    );
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Expense Saved")),
-                    );
-
-                    setState(() {});
+                    saveExpense();
                   }
                 },
+                child: const Text("Save Expense"),
               ),
             ],
           ),
