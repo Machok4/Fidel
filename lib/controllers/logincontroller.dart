@@ -1,7 +1,6 @@
 import 'package:get/state_manager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../configs/api_config.dart';
 
 class LoginController extends GetxController {
   var username;
@@ -13,13 +12,10 @@ class LoginController extends GetxController {
     password = pass;
 
     try {
-      final response = await http.post(
-        ApiConfig.endpoint('login.php'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': username,
-          'password': password,
-        }),
+      final response = await http.get(
+        Uri.parse(
+          "http://192.168.11.28/rootfolder/login.php?email=$username&password=$password",
+        ),
       );
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -30,13 +26,10 @@ class LoginController extends GetxController {
 
       return {
         'success': 0,
-        'message': data['message'] ?? 'Login failed',
+        'message': data['message'] ?? 'Invalid email or password',
       };
-    } catch (_) {
-      return {
-        'success': 0,
-        'message': 'Unable to reach the server',
-      };
+    } catch (e) {
+      return {'success': 0, 'message': 'Unable to reach the server: $e'};
     }
   }
 
