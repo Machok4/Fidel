@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+//import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:http/http.dart' as http;
 
 class AddExpenseScreen extends StatefulWidget {
@@ -27,11 +28,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   Future<void> saveExpense() async {
     try {
-      var response = await http.get(
-        Uri.parse(
-          "http://192.168.11.28/rootfolder/save_expense.php?title=$title&amount=$amount&category=$category&expense_date=${selectedDate.toIso8601String().split('T')[0]}",
-        ),
+      var response = await http.post(
+        Uri.parse("http://192.168.11.28/rootfolder/save_expenses.php"),
+        body: {
+          'title': title,
+          'amount': amount.toString(),
+          'category': category,
+          'expense_date': selectedDate.toIso8601String().split('T')[0],
+        },
       );
+
+      if (!mounted) return;
 
       final data = jsonDecode(response.body);
 
@@ -46,6 +53,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error: $e")));
@@ -64,18 +72,22 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             children: [
               TextFormField(
                 decoration: const InputDecoration(labelText: "Title"),
-                onChanged: (value) => title = value,
-                validator: (value) => value!.isEmpty ? "Enter title" : null,
+                onSaved: (value) => title = value ?? '',
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Enter title" : null,
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: "Amount"),
                 keyboardType: TextInputType.number,
-                onChanged: (value) => amount = double.tryParse(value) ?? 0,
+                onSaved: (value) => amount = double.tryParse(value ?? '') ?? 0,
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Enter an amount';
+                  if (value == null || value.isEmpty) {
+                    return 'Enter an amount';
+                  }
                   final parsed = double.tryParse(value);
-                  if (parsed == null || parsed <= 0)
+                  if (parsed == null || parsed <= 0) {
                     return 'Enter a valid amount';
+                  }
                   return null;
                 },
               ),
@@ -107,10 +119,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
                     saveExpense();
                   }
                 },
                 child: const Text("Save Expense"),
+                style: ElevatedButton.styleFrom(),
               ),
             ],
           ),
