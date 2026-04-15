@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:acs314_project/views/addexpense.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/money_model.dart';
-import 'addexpense.dart';
+
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -44,13 +45,7 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchExpenses();
-  }
-
-  Future<void> goToAddExpense() async {
+  Future<void> _goToAddExpense() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
@@ -62,13 +57,18 @@ class _ListPageState extends State<ListPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchExpenses();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expenses"),
-        actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: goToAddExpense),
-        ],
+      appBar: AppBar(title: const Text("Your Expenses")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _goToAddExpense,
+        child: const Icon(Icons.add),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -90,17 +90,13 @@ class _ListPageState extends State<ListPage> {
                       "KSH ${item.amount.toStringAsFixed(2)}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: Colors.green,
                       ),
                     ),
                   ),
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: goToAddExpense,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
