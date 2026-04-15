@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/LoginImage.jpg', height: 100, width: 100),
+              Image.asset('assets/loginimage.jpg.jpg', height: 100, width: 100),
               Text(
                 "Login Screen",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
